@@ -18,6 +18,8 @@ from .utils import name_clean
 class Test_Catalog(Catalog):
     """Catalog class for `Test_Entry` objects."""
 
+    paths = PATHS
+
     def __init__(self, args, log):
         """Initialize catalog."""
         # Initialize super `astrocats.structures.catalog.Catalog` object

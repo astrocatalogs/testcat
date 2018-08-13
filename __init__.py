@@ -2,7 +2,7 @@
 """
 
 import os
-import sys
+# import sys
 
 catalog_class = {
     "name": "Test_Catalog",
@@ -10,21 +10,23 @@ catalog_class = {
     "import_path": "testcat."
 }
 
+'''
 _PATH_ASTROCATS = "/Users/lzkelley/Research/catalogs/redesign/astrocats/"
 if _PATH_ASTROCATS not in sys.path:
     sys.path.append(_PATH_ASTROCATS)
+'''
 
 import astrocats
 
 
-class _PATHS(astrocats._PATHS):
+class Paths(astrocats.Paths):
 
     ROOT = os.path.join(os.path.dirname(__file__), "")
     NAME = __name__
     FILE = __file__
 
     def __init__(self):
-        super(_PATHS, self).__init__()
+        super(Paths, self).__init__()
 
         # auxiliary datafiles
         self.TYPE_SYNONYMS = os.path.join(self.INPUT, 'type-synonyms.json')
@@ -51,5 +53,4 @@ class _PATHS(astrocats._PATHS):
         return all_repos
 
 
-PATHS = _PATHS()
-# PATHS = _PATHS
+PATHS = Paths()

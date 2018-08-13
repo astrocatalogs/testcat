@@ -1,4 +1,5 @@
 """Testnovae specific catalog class."""
+
 import codecs
 import json
 import os
@@ -6,53 +7,23 @@ from collections import OrderedDict
 from datetime import datetime
 # from subprocess import check_output
 
+from astrocats import utils
 from astrocats.catalog.catalog import Catalog
-from astrocats.catalog.struct import QUANTITY
-from astrocats.catalog.utils import read_json_arr, read_json_dict
+# from astrocats.catalog.struct import QUANTITY
 
-from .testnova import TESTNOVA, Testnova
+from testcat import PATHS
+# from .testnova import TESTNOVA, Testnova
 from .utils import name_clean
 
 
-class TestnovaCatalog(Catalog):
+class Test_Catalog(Catalog):
     """Catalog class for `Testnova` objects."""
-
-    class PATHS(Catalog.PATHS):
-        """Paths to catalog inputs/outputs."""
-
-        PATH_BASE = os.path.abspath(os.path.dirname(__file__))
-
-        def __init__(self, catalog):
-            """Initialize paths."""
-            super(TestnovaCatalog.PATHS, self).__init__(catalog)
-            # auxiliary datafiles
-            self.TYPE_SYNONYMS = os.path.join(self.PATH_INPUT, 'type-synonyms.json')
-            self.SOURCE_SYNONYMS = os.path.join(self.PATH_INPUT, 'source-synonyms.json')
-            self.URL_REDIRECTS = os.path.join(self.PATH_INPUT, 'url-redirects.json')
-            self.NON_SNE_TYPES = os.path.join(self.PATH_INPUT, 'non-sne-types.json')
-            self.NON_SNE_PREFIXES = os.path.join(self.PATH_INPUT, 'non-sne-prefixes.json')
-            self.BIBERRORS = os.path.join(self.PATH_INPUT, 'biberrors.json')
-            self.ATELS = os.path.join(self.PATH_INPUT, 'atels.json')
-            self.CBETS = os.path.join(self.PATH_INPUT, 'cbets.json')
-            self.IAUCS = os.path.join(self.PATH_INPUT, 'iaucs.json')
-            # cached datafiles
-            self.BIBAUTHORS = os.path.join(self.PATH_CACHE, 'bibauthors.json')
-            self.EXTINCT = os.path.join(self.PATH_CACHE, 'extinctions.json')
-
-        def get_all_repo_folders(self, *args, **kwargs):
-            """
-            """
-            all_repos = super().get_all_repo_folders(*args, **kwargs)
-            # repos = [rep for rep in all_repos if 'testcat-output' in rep]
-            # self.catalog.log.warning("Skipping all non-targeted repos...")
-            # return repos
-            return all_repos
 
     def __init__(self, args, log):
         """Initialize catalog."""
         # Initialize super `astrocats.catalog.catalog.Catalog` object
-        super(TestnovaCatalog, self).__init__(args, log, git_clone=True)
-        self.proto = Testnova
+        super(Test_Catalog, self).__init__(args, log)
+        # self.proto = Testnova
         self._load_aux_data()
         return
 
@@ -118,30 +89,29 @@ class TestnovaCatalog(Catalog):
         """Load auxiliary dictionaries for use in this catalog."""
         # Create/Load auxiliary dictionaries
         self.nedd_dict = OrderedDict()
-        self.bibauthor_dict = read_json_dict(self.PATHS.BIBAUTHORS)
-        self.biberror_dict = read_json_dict(self.PATHS.BIBERRORS)
-        self.extinctions_dict = read_json_dict(self.PATHS.EXTINCT)
-        self.iaucs_dict = read_json_dict(self.PATHS.IAUCS)
-        self.cbets_dict = read_json_dict(self.PATHS.CBETS)
-        self.atels_dict = read_json_dict(self.PATHS.ATELS)
-        self.source_syns = read_json_dict(self.PATHS.SOURCE_SYNONYMS)
-        self.url_redirs = read_json_dict(self.PATHS.URL_REDIRECTS)
-        self.type_syns = read_json_dict(self.PATHS.TYPE_SYNONYMS)
+        self.bibauthor_dict = utils.read_json_dict(PATHS.AUTHORS_FILE)
+        self.biberror_dict = utils.read_json_dict(PATHS.BIBERRORS)
+        self.extinctions_dict = utils.read_json_dict(PATHS.EXTINCT)
+        self.iaucs_dict = utils.read_json_dict(PATHS.IAUCS)
+        self.cbets_dict = utils.read_json_dict(PATHS.CBETS)
+        self.atels_dict = utils.read_json_dict(PATHS.ATELS)
+        self.source_syns = utils.read_json_dict(PATHS.SOURCE_SYNONYMS)
+        self.url_redirs = utils.read_json_dict(PATHS.URL_REDIRECTS)
+        self.type_syns = utils.read_json_dict(PATHS.TYPE_SYNONYMS)
         # Create/Load auxiliary arrays
-        self.nonsneprefixes_dict = read_json_arr(
-            self.PATHS.NON_SNE_PREFIXES)
-        self.nonsnetypes = read_json_arr(self.PATHS.NON_SNE_TYPES)
+        self.nonsneprefixes_dict = utils.read_json_arr(PATHS.NON_SNE_PREFIXES)
+        self.nonsnetypes = utils.read_json_arr(PATHS.NON_SNE_TYPES)
         return
 
     def save_caches(self):
         """Save caches to JSON files."""
-        jsonstring = json.dumps(self.bibauthor_dict, indent='\t',
-                                separators=(',', ':'), ensure_ascii=False)
-        with codecs.open(self.PATHS.BIBAUTHORS, 'w', encoding='utf8') as f:
+        jsonstring = json.dumps(
+            self.bibauthor_dict, indent='\t', separators=(',', ':'), ensure_ascii=False)
+        with codecs.open(PATHS.AUTHORS_FILE, 'w', encoding='utf8') as f:
             f.write(jsonstring)
-        jsonstring = json.dumps(self.extinctions_dict, indent='\t',
-                                separators=(',', ':'), ensure_ascii=False)
-        with codecs.open(self.PATHS.EXTINCT, 'w', encoding='utf8') as f:
+        jsonstring = json.dumps(
+            self.extinctions_dict, indent='\t', separators=(',', ':'), ensure_ascii=False)
+        with codecs.open(PATHS.EXTINCT, 'w', encoding='utf8') as f:
             f.write(jsonstring)
 
     def clean_entry_name(self, name):

@@ -11,10 +11,10 @@ import numpy as np
 import astrocats
 from astrocats.catalog.struct import Entry
 from astrocats.catalog.struct import (PHOTOMETRY, QUANTITY, SOURCE)
-from astrocats.catalog.utils import (bib_priority, get_sig_digits,
-                                     get_source_year, is_number,
-                                     jd_to_mjd, listify, make_date_string,
-                                     pretty_num, uniq_cdl, mjd_to_datetime)
+from astrocats.utils import (bib_priority, get_sig_digits,
+                             get_source_year, is_number,
+                             jd_to_mjd, listify, make_date_string,
+                             pretty_num, uniq_cdl, mjd_to_datetime)
 from six import string_types
 
 from .constants import MAX_VISUAL_BANDS

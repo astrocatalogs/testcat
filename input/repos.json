@@ -1,0 +1,16 @@
+{
+    "output":[
+        "testcat-output"
+    ],
+    "boneyard":[],
+    "external":[
+        "sne-external",
+        "sne-external-radio",
+        "sne-external-xray",
+        "sne-external-spectra"
+    ],
+    "private":[],
+    "internal":[
+        "sne-internal"
+    ]
+}

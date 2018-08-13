@@ -1,6 +1,6 @@
 """
 """
-from astrocats.catalog.struct import QUANTITY
+from astrocats.structures.struct import QUANTITY
 
 __all__ = ['frame_priority']
 

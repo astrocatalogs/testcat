@@ -1,16 +1,17 @@
-"""TestnovaCatalog transient class."""
+"""Test_Catalog transient class."""
 
-import os
+# import os
 import warnings
-import sys
+
 from collections import OrderedDict
 from decimal import Decimal
 
 import numpy as np
 
-import astrocats
-from astrocats.catalog.struct import Entry
-from astrocats.catalog.struct import (PHOTOMETRY, QUANTITY, SOURCE)
+# import astrocats
+from astrocats.structures import struct
+from astrocats.structures.struct import Entry
+from astrocats.structures.struct import (PHOTOMETRY, QUANTITY, SOURCE)
 from astrocats.utils import (bib_priority, get_sig_digits,
                              get_source_year, is_number,
                              jd_to_mjd, listify, make_date_string,
@@ -20,19 +21,10 @@ from six import string_types
 from .constants import MAX_VISUAL_BANDS
 from .utils import frame_priority, host_clean, radec_clean
 
-_PAS_PATH = "/Users/lzkelley/Research/catalogs/astroschema"
-if _PAS_PATH not in sys.path:
-    sys.path.append(_PAS_PATH)
 
-import pyastroschema as pas  # noqa
-
-path_entry = os.path.join(astrocats._PATH_SCHEMA, "input", "entry.json")
-path_astrocats_entry = os.path.join(astrocats._PATH_SCHEMA, "input", "astrocats_entry.json")
-
-
-@pas.struct.set_struct_schema(path_entry, extensions=[path_astrocats_entry])
-class Testnova(Entry):
-    """Testnova `Entry` child class.
+@struct.set_struct_schema("astroschema_entry", extensions=["astrocats_entry"])
+class Test_Entry(Entry):
+    """Test_Entry `Entry` child class.
 
     NOTE: OrderedDict data is just the `name` values from the JSON file.
           I.e. it does not include the highest nesting level
@@ -43,8 +35,8 @@ class Testnova(Entry):
     """
 
     def __init__(self, catalog, name=None, stub=False):
-        """Initialize `Testnova`."""
-        super(Testnova, self).__init__(catalog, name, stub=stub)
+        """Initialize `Test_Entry`."""
+        super(Test_Entry, self).__init__(catalog, name, stub=stub)
         return
 
     def _append_additional_tags(self, name, sources, quantity):
@@ -214,7 +206,7 @@ class Testnova(Entry):
                     kwargs[SOURCE.URL] = rep
                     break
 
-        return super(Testnova, self).add_source(**kwargs)
+        return super(Test_Entry, self).add_source(**kwargs)
 
     def priority_prefixes(self):
         """Prefixes to given priority to when merging duplicate entries.
@@ -232,13 +224,13 @@ class Testnova(Entry):
         """These aliases are considered when merging duplicates only, but are
         not added to the list of aliases that would be included with the event
         """
-        if (self[TESTNOVA.NAME].startswith('SN') and
-                is_number(self[TESTNOVA.NAME][2:6])):
-            return ['AT' + self[TESTNOVA.NAME][2:]]
+        if (self[TEST_ENTRY.NAME].startswith('SN') and
+                is_number(self[TEST_ENTRY.NAME][2:6])):
+            return ['AT' + self[TEST_ENTRY.NAME][2:]]
         return []
 
     def sanitize(self):
-        super(Testnova, self).sanitize()
+        super(Test_Entry, self).sanitize()
 
         # Calculate some columns based on imported data, sanitize some fields
         name = self[self._KEYS.NAME]
@@ -526,7 +518,7 @@ class Testnova(Entry):
 
     def set_first_max_light(self):
 
-        if TESTNOVA.MAX_APP_MAG not in self:
+        if TEST_ENTRY.MAX_APP_MAG not in self:
             # Get the maximum amongst all bands
             _max_lights = self._get_max_light()
             mldt, mlmag, mlband, mlsource = _max_lights
@@ -535,14 +527,14 @@ class Testnova(Entry):
                 uniq_src = uniq_cdl([source] + mlsource.split(','))
             if mldt:
                 max_date = make_date_string(mldt.year, mldt.month, mldt.day)
-                self.add_quantity(TESTNOVA.MAX_DATE, max_date, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_DATE, max_date, uniq_src, derived=True)
             if mlmag:
                 mlmag = pretty_num(mlmag)
-                self.add_quantity(TESTNOVA.MAX_APP_MAG, mlmag, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_APP_MAG, mlmag, uniq_src, derived=True)
             if mlband:
-                self.add_quantity(TESTNOVA.MAX_BAND, mlband, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_BAND, mlband, uniq_src, derived=True)
 
-        if TESTNOVA.MAX_VISUAL_APP_MAG not in self:
+        if TEST_ENTRY.MAX_VISUAL_APP_MAG not in self:
             # Get the "visual" maximum
             _max_lights = self._get_max_light(visual=True)
             mldt, mlmag, mlband, mlsource = _max_lights
@@ -551,12 +543,12 @@ class Testnova(Entry):
                 uniq_src = uniq_cdl([source] + mlsource.split(','))
             if mldt:
                 max_date = make_date_string(mldt.year, mldt.month, mldt.day)
-                self.add_quantity(TESTNOVA.MAX_VISUAL_DATE, max_date, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_VISUAL_DATE, max_date, uniq_src, derived=True)
             if mlmag:
                 mlmag = pretty_num(mlmag)
-                self.add_quantity(TESTNOVA.MAX_VISUAL_APP_MAG, mlmag, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_VISUAL_APP_MAG, mlmag, uniq_src, derived=True)
             if mlband:
-                self.add_quantity(TESTNOVA.MAX_VISUAL_BAND, mlband, uniq_src, derived=True)
+                self.add_quantity(TEST_ENTRY.MAX_VISUAL_BAND, mlband, uniq_src, derived=True)
 
         if (self._KEYS.DISCOVER_DATE not in self or max([
                 len(x[QUANTITY.VALUE].split('/'))
@@ -602,11 +594,11 @@ class Testnova(Entry):
         bandless photometry, in such cases the bandless photometry is not
         providing additional information.
         """
-        if TESTNOVA.PHOTOMETRY not in self:
+        if TEST_ENTRY.PHOTOMETRY not in self:
             return
         mjds = [
             np.mean([float(x) for x in listify(
-                x[PHOTOMETRY.TIME])]) for x in self[TESTNOVA.PHOTOMETRY]
+                x[PHOTOMETRY.TIME])]) for x in self[TEST_ENTRY.PHOTOMETRY]
             if (PHOTOMETRY.TIME in x and x.get(PHOTOMETRY.U_TIME, '') == 'MJD'
                 and PHOTOMETRY.MAGNITUDE in x and PHOTOMETRY.BAND in x)
         ]
@@ -615,7 +607,7 @@ class Testnova(Entry):
         minmjd = min(mjds) - 1
         maxmjd = max(mjds) + 1
         newphotos = []
-        for photo in self[TESTNOVA.PHOTOMETRY]:
+        for photo in self[TEST_ENTRY.PHOTOMETRY]:
             ptime = np.mean([float(x) for x in listify(
                 photo[PHOTOMETRY.TIME])]) if PHOTOMETRY.TIME in photo else None
             if (PHOTOMETRY.MAGNITUDE in photo and
@@ -629,7 +621,7 @@ class Testnova(Entry):
                                    photo.get(PHOTOMETRY.MAGNITUDE, 'N/A')))
                 continue
             newphotos.append(photo)
-        self[TESTNOVA.PHOTOMETRY] = newphotos
+        self[TEST_ENTRY.PHOTOMETRY] = newphotos
         return
 
     def get_best_redshift(self, key=None):
@@ -683,9 +675,9 @@ class Testnova(Entry):
                 newname = alias
                 break
         # If not, name based on the 'discoverer' survey
-        if not newname and TESTNOVA.DISCOVERER in self:
+        if not newname and TEST_ENTRY.DISCOVERER in self:
             discoverer = ','.join(
-                [x['value'].upper() for x in self[TESTNOVA.DISCOVERER]])
+                [x['value'].upper() for x in self[TEST_ENTRY.DISCOVERER]])
             if 'ASAS' in discoverer:
                 for alias in aliases:
                     if 'ASASSN' in alias.upper():
@@ -791,17 +783,17 @@ class Testnova(Entry):
         return ct_list
 
 
-TESTNOVA = Testnova._KEYCHAIN
-Testnova._KEYS = TESTNOVA
+TEST_ENTRY = Test_Entry._KEYCHAIN
+Test_Entry._KEYS = TEST_ENTRY
 
-TESTNOVA.DISCOVER_DATE = TESTNOVA.DISCOVERDATE
+TEST_ENTRY.DISCOVER_DATE = TEST_ENTRY.DISCOVERDATE
 
-TESTNOVA.MAX_VISUAL_BAND = TESTNOVA.MAXVISUALBAND
-TESTNOVA.MAX_VISUAL_DATE = TESTNOVA.MAXVISUALDATE
-TESTNOVA.MAX_VISUAL_APP_MAG = TESTNOVA.MAXVISUALAPPMAG
-TESTNOVA.MAX_VISUAL_ABS_MAG = TESTNOVA.MAXVISUALABSMAG
-TESTNOVA.MAX_DATE = TESTNOVA.MAXDATE
-TESTNOVA.MAX_BAND = TESTNOVA.MAXBAND
-TESTNOVA.MAX_APP_MAG = TESTNOVA.MAXAPPMAG
-TESTNOVA.MAX_ABS_MAG = TESTNOVA.MAXABSMAG
-TESTNOVA.CLAIMED_TYPE = TESTNOVA.CLAIMEDTYPE
+TEST_ENTRY.MAX_VISUAL_BAND = TEST_ENTRY.MAXVISUALBAND
+TEST_ENTRY.MAX_VISUAL_DATE = TEST_ENTRY.MAXVISUALDATE
+TEST_ENTRY.MAX_VISUAL_APP_MAG = TEST_ENTRY.MAXVISUALAPPMAG
+TEST_ENTRY.MAX_VISUAL_ABS_MAG = TEST_ENTRY.MAXVISUALABSMAG
+TEST_ENTRY.MAX_DATE = TEST_ENTRY.MAXDATE
+TEST_ENTRY.MAX_BAND = TEST_ENTRY.MAXBAND
+TEST_ENTRY.MAX_APP_MAG = TEST_ENTRY.MAXAPPMAG
+TEST_ENTRY.MAX_ABS_MAG = TEST_ENTRY.MAXABSMAG
+TEST_ENTRY.CLAIMED_TYPE = TEST_ENTRY.CLAIMEDTYPE

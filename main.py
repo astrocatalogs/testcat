@@ -3,8 +3,8 @@
 
 
 def main(args, clargs, log):
-    from .testnovacatalog import TestnovaCatalog
-    from astrocats.catalog.argshandler import ArgsHandler
+    from .testnovacatalog import Test_Catalog
+    from astrocats.structures.argshandler import ArgsHandler
 
     # Create an `ArgsHandler` instance with the appropriate argparse machinery
     log.debug("Initializing `ArgsHandler`")
@@ -15,8 +15,8 @@ def main(args, clargs, log):
     if args is None:
         return
 
-    log.debug("Initializing `TestnovaCatalog`")
-    catalog = TestnovaCatalog(args, log)
+    log.debug("Initializing `Test_Catalog`")
+    catalog = Test_Catalog(args, log)
 
     # Run the subcommand given in `args`
     log.debug("Running subcommand")

@@ -1,16 +1,8 @@
-"""The Testnova AstroCatalog.
+"""The Testcat AstroCatalog.
 """
 
 import os
 import sys
-
-# from . import main
-
-# from . import test_catalog
-
-# Catalog_Class = test_catalog.Test_Catalog
-
-__name__ = "testcat"
 
 catalog_class = {
     "name": "Test_Catalog",
@@ -46,9 +38,8 @@ class _PATHS(astrocats._PATHS):
         self.IAUCS = os.path.join(self.INPUT, 'iaucs.json')
 
         # cached datafiles
-        # self.PATH_CACHE = os.path.join(self.PATH_OUTPUT, 'cache', '')
-        # self.BIBAUTHORS = os.path.join(self.PATH_CACHE, 'bibauthors.json')
         self.EXTINCT = os.path.join(self.CACHE, 'extinctions.json')
+        return
 
     def get_all_repo_folders(self, *args, **kwargs):
         """

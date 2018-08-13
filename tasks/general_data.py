@@ -7,11 +7,11 @@ from copy import deepcopy
 from decimal import Decimal
 from glob import glob
 
-from astrocats.catalog.struct import SPECTRUM, PHOTOMETRY
+from astrocats.structures.struct import SPECTRUM, PHOTOMETRY
 from astrocats import utils
 from astropy.io import fits
 
-from ..testnova import TESTNOVA, Testnova
+from ..test_entry import TEST_ENTRY, Test_Entry
 
 
 def do_external_radio(catalog):
@@ -53,7 +53,7 @@ def do_external_radio(catalog):
                         PHOTOMETRY.SOURCE: source
                     }
                     catalog.entries[name].add_photometry(**photodict)
-                    catalog.entries[name].add_quantity(TESTNOVA.ALIAS, oldname, source)
+                    catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, oldname, source)
 
         ni += 1
         if catalog.args.travis and ni >= catalog.TRAVIS_QUERY_LIMIT:
@@ -96,7 +96,7 @@ def do_external_xray(catalog):
                         PHOTOMETRY.SOURCE: source
                     }
                     catalog.entries[name].add_photometry(**photodict)
-                    catalog.entries[name].add_quantity(TESTNOVA.ALIAS,
+                    catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS,
                                                        oldname, source)
 
         ni += 1
@@ -233,9 +233,9 @@ def do_internal(catalog):
     catalog.log.debug("found {} files matching '{}'".format(len(files), path_pattern))
     ni = 0
     for datafile in utils.pbar_strings(files, task_str):
-        new_entry = Testnova.init_from_file(catalog, path=datafile, clean=True, merge=True)
+        new_entry = Test_Entry.init_from_file(catalog, path=datafile, clean=True, merge=True)
 
-        name = new_entry[TESTNOVA.NAME]
+        name = new_entry[TEST_ENTRY.NAME]
         old_name = None
 
         # Look for an existing entry with one of the aliases

@@ -5,10 +5,10 @@ from glob import glob
 from math import floor
 from decimal import Decimal
 
-from astrocats.catalog.struct import PHOTOMETRY
+from astrocats.structures.struct import PHOTOMETRY
 from astrocats import utils
 
-from ..testnova import TESTNOVA
+from ..testnova import TEST_ENTRY
 from ..utils import clean_snname
 
 ACKN_CFA = ("This research has made use of the CfA Supernova Archive, "
@@ -49,10 +49,10 @@ def do_cfa_photo(catalog):
         secondaryurl = 'https://www.cfa.harvard.edu/supernova/SNarchive.html'
         secondarysource = catalog.entries[name].add_source(
             name=secondaryname, url=secondaryurl, secondary=True, acknowledgment=ACKN_CFA)
-        catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, secondarysource)
+        catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, secondarysource)
 
         year = re.findall(r'\d+', name)[0]
-        catalog.entries[name].add_quantity(TESTNOVA.DISCOVER_DATE, year, secondarysource)
+        catalog.entries[name].add_quantity(TEST_ENTRY.DISCOVER_DATE, year, secondarysource)
 
         eventbands = list(eventparts[1])
 
@@ -131,8 +131,8 @@ def do_cfa_photo(catalog):
             name = catalog.add_entry(name)
 
             source = catalog.entries[name].add_source(bibcode='2012ApJS..200...12H')
-            catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
-            catalog.entries[name].add_quantity(TESTNOVA.CLAIMED_TYPE, 'Ia', source)
+            catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
+            catalog.entries[name].add_quantity(TEST_ENTRY.CLAIMED_TYPE, 'Ia', source)
             photodict = {
                 PHOTOMETRY.U_TIME: 'MJD',
                 PHOTOMETRY.TIME: row[2].strip(),
@@ -158,7 +158,7 @@ def do_cfa_photo(catalog):
 
             source = catalog.entries[name].add_source(
                 bibcode='2014ApJS..213...19B')
-            catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
+            catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
             photodict = {
                 PHOTOMETRY.U_TIME: 'MJD',
                 PHOTOMETRY.TIME: row[2],
@@ -203,7 +203,7 @@ def do_cfa_spectra(catalog):
             url=refurl,
             secondary=True,
             acknowledgment=ACKN_CFA)
-        catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
+        catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
         for fi, fname in enumerate(
                 sorted(
                     glob(fullpath + '/*'), key=lambda s: s.lower())):
@@ -275,7 +275,7 @@ def do_cfa_spectra(catalog):
             url=refurl,
             secondary=True,
             acknowledgment=ACKN_CFA)
-        catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
+        catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
         for fi, fname in enumerate(
                 sorted(
                     glob(fullpath + '/*'), key=lambda s: s.lower())):
@@ -345,7 +345,7 @@ def do_cfa_spectra(catalog):
             url=refurl,
             secondary=True,
             acknowledgment=ACKN_CFA)
-        catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
+        catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
         for fi, fname in enumerate(
                 sorted(
                     glob(fullpath + '/*'), key=lambda s: s.lower())):
@@ -406,7 +406,7 @@ def do_cfa_spectra(catalog):
             url=refurl,
             secondary=True,
             acknowledgment=ACKN_CFA)
-        catalog.entries[name].add_quantity(TESTNOVA.ALIAS, name, source)
+        catalog.entries[name].add_quantity(TEST_ENTRY.ALIAS, name, source)
         for fi, fname in enumerate(
                 sorted(
                     glob(fullpath + '/*'), key=lambda s: s.lower())):

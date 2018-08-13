@@ -2,28 +2,27 @@
 
 import codecs
 import json
-import os
+
 from collections import OrderedDict
 from datetime import datetime
-# from subprocess import check_output
 
 from astrocats import utils
-from astrocats.catalog.catalog import Catalog
-# from astrocats.catalog.struct import QUANTITY
+from astrocats.structures.catalog import Catalog
+from astrocats.structures.struct import QUANTITY
 
 from testcat import PATHS
-# from .testnova import TESTNOVA, Testnova
+from .test_entry import TEST_ENTRY, Test_Entry
 from .utils import name_clean
 
 
 class Test_Catalog(Catalog):
-    """Catalog class for `Testnova` objects."""
+    """Catalog class for `Test_Entry` objects."""
 
     def __init__(self, args, log):
         """Initialize catalog."""
-        # Initialize super `astrocats.catalog.catalog.Catalog` object
+        # Initialize super `astrocats.structures.catalog.Catalog` object
         super(Test_Catalog, self).__init__(args, log)
-        # self.proto = Testnova
+        self.proto = Test_Entry
         self._load_aux_data()
         return
 
@@ -33,7 +32,7 @@ class Test_Catalog(Catalog):
         An entry would be buried if it does not belong to the class of object
         associated with the given catalog.
         """
-        (bury_entry, save_entry) = super(TestnovaCatalog, self).should_bury(name)
+        (bury_entry, save_entry) = super(Test_Catalog, self).should_bury(name)
 
         ct_val = None
         if name.startswith(tuple(self.nonsneprefixes_dict)):
@@ -41,8 +40,8 @@ class Test_Catalog(Catalog):
                 "Killing '{}', non-SNe prefix.".format(name))
             save_entry = False
         else:
-            if TESTNOVA.CLAIMED_TYPE in self.entries[name]:
-                for ct in self.entries[name][TESTNOVA.CLAIMED_TYPE]:
+            if TEST_ENTRY.CLAIMED_TYPE in self.entries[name]:
+                for ct in self.entries[name][TEST_ENTRY.CLAIMED_TYPE]:
                     up_val = ct[QUANTITY.VALUE].upper().replace('?', '')
                     up_types = [x.upper() for x in self.nonsnetypes]
                     if up_val not in up_types and up_val != 'CANDIDATE':
@@ -53,19 +52,19 @@ class Test_Catalog(Catalog):
                         bury_entry = True
                         ct_val = ct[QUANTITY.VALUE]
             else:
-                if (TESTNOVA.DISCOVER_DATE in self.entries[name] and
+                if (TEST_ENTRY.DISCOVER_DATE in self.entries[name] and
                     any([x.get(QUANTITY.VALUE).startswith('AT')
-                         for x in self.entries[name][TESTNOVA.ALIAS]]) and
+                         for x in self.entries[name][TEST_ENTRY.ALIAS]]) and
                     not any([x.get(QUANTITY.VALUE).startswith('SN')
-                             for x in self.entries[name][TESTNOVA.ALIAS]])):
+                             for x in self.entries[name][TEST_ENTRY.ALIAS]])):
                     try:
                         try:
                             dd = datetime.strptime(self.entries[name][
-                                TESTNOVA.DISCOVER_DATE][0].get('value', ''),
+                                TEST_ENTRY.DISCOVER_DATE][0].get('value', ''),
                                 '%Y/%m/%d')
                         except ValueError:
                             dd = datetime.strptime(self.entries[name][
-                                TESTNOVA.DISCOVER_DATE][0].get('value', '') +
+                                TEST_ENTRY.DISCOVER_DATE][0].get('value', '') +
                                 '/12/31',
                                 '%Y')
                     except ValueError:

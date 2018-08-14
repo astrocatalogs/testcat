@@ -13,7 +13,7 @@ from astropy.cosmology import Planck15 as cosmo
 from astropy.cosmology import z_at_value
 
 from ..constants import CLIGHT, KM
-from ..testnova import TEST_ENTRY
+from ..test_entry import TEST_ENTRY
 
 
 def do_cleanup(catalog):

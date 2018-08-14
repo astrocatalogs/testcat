@@ -8,7 +8,7 @@ from decimal import Decimal
 from astrocats.structures.struct import PHOTOMETRY
 from astrocats import utils
 
-from ..testnova import TEST_ENTRY
+from ..test_entry import TEST_ENTRY
 from ..utils import clean_snname
 
 ACKN_CFA = ("This research has made use of the CfA Supernova Archive, "

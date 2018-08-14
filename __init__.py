@@ -19,14 +19,14 @@ if _PATH_ASTROCATS not in sys.path:
 import astrocats
 
 
-class Paths(astrocats.Paths):
+class Test_Paths(astrocats.Paths):
 
     ROOT = os.path.join(os.path.dirname(__file__), "")
     NAME = __name__
     FILE = __file__
 
     def __init__(self):
-        super(Paths, self).__init__()
+        super(Test_Paths, self).__init__()
 
         # auxiliary datafiles
         self.TYPE_SYNONYMS = os.path.join(self.INPUT, 'type-synonyms.json')
@@ -53,4 +53,4 @@ class Paths(astrocats.Paths):
         return all_repos
 
 
-PATHS = Paths()
+PATHS = Test_Paths()

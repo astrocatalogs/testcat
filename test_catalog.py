@@ -10,20 +10,22 @@ from astrocats import utils
 from astrocats.structures.catalog import Catalog
 from astrocats.structures.struct import QUANTITY
 
-from testcat import PATHS
-from .test_entry import TEST_ENTRY, Test_Entry
-from .utils import name_clean
+from testcat import PATHS as _PATHS
+from testcat.test_entry import TEST_ENTRY, Test_Entry
+from testcat.utils import name_clean
 
 
 class Test_Catalog(Catalog):
     """Catalog class for `Test_Entry` objects."""
 
-    paths = PATHS
+    MODULE_NAME = "testcat"
+    PATHS = _PATHS
 
     def __init__(self, args, log):
         """Initialize catalog."""
         # Initialize super `astrocats.structures.catalog.Catalog` object
         super(Test_Catalog, self).__init__(args, log)
+
         self.proto = Test_Entry
         self._load_aux_data()
         return
@@ -90,29 +92,29 @@ class Test_Catalog(Catalog):
         """Load auxiliary dictionaries for use in this catalog."""
         # Create/Load auxiliary dictionaries
         self.nedd_dict = OrderedDict()
-        self.bibauthor_dict = utils.read_json_dict(PATHS.AUTHORS_FILE)
-        self.biberror_dict = utils.read_json_dict(PATHS.BIBERRORS)
-        self.extinctions_dict = utils.read_json_dict(PATHS.EXTINCT)
-        self.iaucs_dict = utils.read_json_dict(PATHS.IAUCS)
-        self.cbets_dict = utils.read_json_dict(PATHS.CBETS)
-        self.atels_dict = utils.read_json_dict(PATHS.ATELS)
-        self.source_syns = utils.read_json_dict(PATHS.SOURCE_SYNONYMS)
-        self.url_redirs = utils.read_json_dict(PATHS.URL_REDIRECTS)
-        self.type_syns = utils.read_json_dict(PATHS.TYPE_SYNONYMS)
+        self.bibauthor_dict = utils.read_json_dict(self.PATHS.AUTHORS_FILE)
+        self.biberror_dict = utils.read_json_dict(self.PATHS.BIBERRORS)
+        self.extinctions_dict = utils.read_json_dict(self.PATHS.EXTINCT)
+        self.iaucs_dict = utils.read_json_dict(self.PATHS.IAUCS)
+        self.cbets_dict = utils.read_json_dict(self.PATHS.CBETS)
+        self.atels_dict = utils.read_json_dict(self.PATHS.ATELS)
+        self.source_syns = utils.read_json_dict(self.PATHS.SOURCE_SYNONYMS)
+        self.url_redirs = utils.read_json_dict(self.PATHS.URL_REDIRECTS)
+        self.type_syns = utils.read_json_dict(self.PATHS.TYPE_SYNONYMS)
         # Create/Load auxiliary arrays
-        self.nonsneprefixes_dict = utils.read_json_arr(PATHS.NON_SNE_PREFIXES)
-        self.nonsnetypes = utils.read_json_arr(PATHS.NON_SNE_TYPES)
+        self.nonsneprefixes_dict = utils.read_json_arr(self.PATHS.NON_SNE_PREFIXES)
+        self.nonsnetypes = utils.read_json_arr(self.PATHS.NON_SNE_TYPES)
         return
 
     def save_caches(self):
         """Save caches to JSON files."""
         jsonstring = json.dumps(
             self.bibauthor_dict, indent='\t', separators=(',', ':'), ensure_ascii=False)
-        with codecs.open(PATHS.AUTHORS_FILE, 'w', encoding='utf8') as f:
+        with codecs.open(self.PATHS.AUTHORS_FILE, 'w', encoding='utf8') as f:
             f.write(jsonstring)
         jsonstring = json.dumps(
             self.extinctions_dict, indent='\t', separators=(',', ':'), ensure_ascii=False)
-        with codecs.open(PATHS.EXTINCT, 'w', encoding='utf8') as f:
+        with codecs.open(self.PATHS.EXTINCT, 'w', encoding='utf8') as f:
             f.write(jsonstring)
 
     def clean_entry_name(self, name):

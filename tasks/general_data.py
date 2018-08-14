@@ -64,7 +64,7 @@ def do_external_radio(catalog):
 
 
 def do_external_xray(catalog):
-    """Import testnova X-ray data."""
+    """Import test_entry X-ray data."""
     task_str = catalog.get_current_task_str()
     path_pattern = os.path.join(catalog.get_current_task_repo(), '*.txt')
     ni = 0

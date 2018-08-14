@@ -648,7 +648,7 @@ class Test_Entry(Entry):
         return bestz, bestkind, bestsig, bestsrc
 
     def set_preferred_name(self):
-        """Set preferred name of testnova.
+        """Set preferred name of test_entry.
 
         Highest preference goes to names of the form 'SN####AA'.
         Otherwise base the name on whichever survey is the 'discoverer'.

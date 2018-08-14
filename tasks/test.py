@@ -1,7 +1,7 @@
 """
 """
 
-from ..testnova import TEST_ENTRY
+# from ..test_entry import TEST_ENTRY
 
 
 def do_test(catalog):

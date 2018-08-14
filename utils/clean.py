@@ -1,4 +1,4 @@
-"""Clean various testnova-specific values."""
+"""Clean various test_entry-specific values."""
 from decimal import Decimal
 from math import floor
 
@@ -8,7 +8,7 @@ __all__ = ['name_clean', 'host_clean', 'radec_clean', 'clean_snname']
 
 
 def name_clean(name):
-    """Apply list of renaming rules for testnova names."""
+    """Apply list of renaming rules for test_entry names."""
     newname = name.strip(' ;,*.')
     if newname.startswith('NAME '):
         newname = newname.replace('NAME ', '', 1)

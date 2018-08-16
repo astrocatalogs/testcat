@@ -18,7 +18,7 @@ def do_external_radio(catalog):
     task_str = catalog.get_current_task_str()
     path_pattern = os.path.join(catalog.get_current_task_repo(), '*.txt')
     ni = 0
-    for datafile in utils.pbar_strings(glob(path_pattern), task_str):
+    for datafile in utils.pbar(glob(path_pattern), task_str, sort=True):
         oldname = os.path.basename(datafile).split('.')[0]
         name = catalog.add_entry(oldname)
         radiosourcedict = OrderedDict()
@@ -68,7 +68,7 @@ def do_external_xray(catalog):
     task_str = catalog.get_current_task_str()
     path_pattern = os.path.join(catalog.get_current_task_repo(), '*.txt')
     ni = 0
-    for datafile in utils.pbar_strings(glob(path_pattern), task_str):
+    for datafile in utils.pbar(glob(path_pattern), task_str, sort=True):
         oldname = os.path.basename(datafile).split('.')[0]
         name = catalog.add_entry(oldname)
         with open(datafile, 'r') as ff:
@@ -232,7 +232,7 @@ def do_internal(catalog):
     files = glob(path_pattern)
     catalog.log.debug("found {} files matching '{}'".format(len(files), path_pattern))
     ni = 0
-    for datafile in utils.pbar_strings(files, task_str):
+    for datafile in utils.pbar(files, task_str, sort=True):
         new_entry = Test_Entry.init_from_file(catalog, path=datafile, clean=True, merge=True)
 
         name = new_entry[TEST_ENTRY.NAME]

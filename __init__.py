@@ -2,19 +2,16 @@
 """
 
 import os
-# import sys
 
-catalog_class = {
-    "name": "Test_Catalog",
-    "file": "test_catalog",
-    "import_path": "testcat."
+catalog_info = {
+    "catalog_name": __name__,
+    "catalog_class": {
+        "name": "Test_Catalog",
+        "file": "test_catalog",
+        "path": "testcat."
+    },
+    "schema_path": None
 }
-
-'''
-_PATH_ASTROCATS = "/Users/lzkelley/Research/catalogs/redesign/astrocats/"
-if _PATH_ASTROCATS not in sys.path:
-    sys.path.append(_PATH_ASTROCATS)
-'''
 
 import astrocats
 
@@ -47,9 +44,6 @@ class Test_Paths(astrocats.Paths):
         """
         """
         all_repos = super().get_all_repo_folders(*args, **kwargs)
-        # repos = [rep for rep in all_repos if 'testcat-output' in rep]
-        # self.catalog.log.warning("Skipping all non-targeted repos...")
-        # return repos
         return all_repos
 
 

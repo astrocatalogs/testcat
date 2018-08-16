@@ -7,6 +7,7 @@ from collections import OrderedDict
 from decimal import Decimal
 
 import numpy as np
+from six import string_types
 
 # import astrocats
 from astrocats.structures import struct
@@ -16,10 +17,9 @@ from astrocats.utils import (bib_priority, get_sig_digits,
                              get_source_year, is_number,
                              jd_to_mjd, listify, make_date_string,
                              pretty_num, uniq_cdl, mjd_to_datetime)
-from six import string_types
 
-from .constants import MAX_VISUAL_BANDS
-from .utils import frame_priority, host_clean, radec_clean
+from testcat.constants import MAX_VISUAL_BANDS
+from testcat.utils import frame_priority, host_clean, radec_clean
 
 
 @struct.set_struct_schema("astroschema_entry", extensions=["astrocats_entry"])

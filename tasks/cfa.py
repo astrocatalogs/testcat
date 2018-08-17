@@ -191,7 +191,7 @@ def do_cfa_spectra(catalog):
         origname = name
         if name.startswith('sn') and utils.is_number(name[2:6]):
             name = 'SN' + name[2:]
-        name = catalog.get_preferred_name(name)
+        name = catalog.get_name_for_entry_or_alias(name)
         if oldname and name != oldname:
             catalog.journal_entries()
         oldname = name
@@ -263,7 +263,7 @@ def do_cfa_spectra(catalog):
             name = 'SN' + name[2:]
         if name.startswith('snf') and utils.is_number(name[3:7]):
             name = 'SNF' + name[3:]
-        name = catalog.get_preferred_name(name)
+        name = catalog.get_name_for_entry_or_alias(name)
         if oldname and name != oldname:
             catalog.journal_entries()
         oldname = name
@@ -333,7 +333,7 @@ def do_cfa_spectra(catalog):
                                 'CfA_SNIbc/') + name
         if name.startswith('sn') and utils.is_number(name[2:6]):
             name = 'SN' + name[2:]
-        name = catalog.get_preferred_name(name)
+        name = catalog.get_name_for_entry_or_alias(name)
         if oldname and name != oldname:
             catalog.journal_entries()
         oldname = name
@@ -394,7 +394,7 @@ def do_cfa_spectra(catalog):
                                 'CfA_Extra/') + name
         if name.startswith('sn') and utils.is_number(name[2:6]):
             name = 'SN' + name[2:]
-        name = catalog.get_preferred_name(name)
+        name = catalog.get_name_for_entry_or_alias(name)
         if oldname and name != oldname:
             catalog.journal_entries()
         oldname = name

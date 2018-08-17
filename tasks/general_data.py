@@ -240,13 +240,13 @@ def do_internal(catalog):
 
         # Look for an existing entry with one of the aliases
         for alias in new_entry.get_aliases():
-            if catalog.entry_exists(alias):
-                old_name = catalog.get_preferred_name(alias)
+            old_name = catalog.get_name_for_entry_or_alias(alias)
+            if old_name is not None:
                 if catalog.entries[old_name]._stub:
                     catalog.add_entry(old_name)
                 break
 
-        if old_name:
+        if old_name is not None:
             old_entry = deepcopy(catalog.entries[old_name])
             catalog.copy_entry_to_entry(new_entry, old_entry)
             catalog.entries[old_name] = old_entry
